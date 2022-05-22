@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qiao.album.dao.ImalDao">
+
+    <resultMap id="imageVos" type="imageVo">
+        <result property="name" column="image_name" javaType="string"/>
+        <result property="iid" column="id" javaType="int"/>
+    </resultMap>
+
+    <insert id="addImal" parameterType="map">
+        INSERT INTO `im2al`(image_name, album_id, image_id, create_time, modified_time)
+        VALUES (#{imageName}, #{albumId}, #{imageId}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+    </insert>
+
+    <select id="getImageIdById" parameterType="int" resultType="int">
+        SELECT `image_id`
+        FROM `im2al`
+        WHERE `id` = #{imalId}
+    </select>
+
+    <select id="getImageCount" parameterType="int" resultType="int">
+        SELECT COUNT(*)
+        FROM `im2al`
+        WHERE `album_id` = #{albumId}
+          AND `deleted` = FALSE
+    </select>
+
+    <select id="getImageVoByAlbumId" parameterType="map" resultMap="imageVos">
+        SELECT `id`, `image_name`
+        FROM im2al
+        WHERE `album_id` = #{albumId}
+          AND `deleted` = FALSE
+        LIMIT #{offset},#{pageSize}
+    </select>
+
+    <update id="deleteByIds">
+        UPDATE `im2al`
+        SET `deleted`= TRUE
+        WHERE `album_id`=#{albumId} AND
+        `id` IN
+        <foreach collection="ids" item="i" index="index" separator="," open="(" close=")">
+            #{i}
+        </foreach>
+    </update>
+
+</mapper>

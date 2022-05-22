@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qiao.album.dao.AlbumDao">
+
+    <insert id="newAlbum" parameterType="album">
+        INSERT INTO `album`(name, owner, is_private, `describe`, create_time, modified_time)
+        VALUES (#{name}, #{owner}, #{isPrivate}, #{describe}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+    </insert>
+
+    <select id="hasSameAlbum" parameterType="album" resultType="int">
+        SELECT COUNT(*)
+        FROM `album`
+        WHERE `owner` = #{owner}
+          AND `name` = #{name}
+          AND `deleted` = FALSE
+    </select>
+
+    <select id="getAlbumByUserId" parameterType="map" resultType="album">
+        SELECT *
+        FROM `album`
+        WHERE `owner` = #{id}
+          AND `deleted` = FALSE
+        LIMIT #{offset},#{pageSize}
+    </select>
+
+    <select id="getAlbumCount" resultType="int">
+        SELECT COUNT(*)
+        FROM `album`
+        WHERE `owner` = #{id}
+          AND `deleted` = FALSE
+    </select>
+
+    <update id="deleteAlbum" parameterType="album">
+        UPDATE `album`
+        SET `deleted`= TRUE
+        WHERE `id` = #{id}
+          AND `owner` = #{owner}
+          AND `deleted` = FALSE
+    </update>
+
+    <update id="updateAlbum" parameterType="album">
+        UPDATE `album`
+        <set>
+            <if test="true">`modified_time`=CURRENT_TIMESTAMP,</if>
+            <if test="name!=null">`name`=#{name},</if>
+            <if test="describe!=null">`describe`=#{describe},</if>
+            <if test="isPrivate!=null">`is_private`=#{isPrivate},</if>
+        </set>
+        WHERE `id`=#{id} AND `owner`=#{owner} AND `deleted`=FALSE
+    </update>
+
+    <select id="hasRight" parameterType="album" resultType="int">
+        SELECT COUNT(*)
+        FROM `album`
+        WHERE `id` = #{id}
+          AND `owner` = #{owner}
+          AND `deleted` = FALSE
+    </select>
+
+    <select id="getAlbumById" resultType="album" parameterType="int">
+        SELECT *
+        FROM `album`
+        WHERE `id` = #{albumId}
+          AND `deleted` = FALSE
+    </select>
+
+</mapper>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qiao.album.dao.ImageDao">
+
+    <insert id="addImage" parameterType="image" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO `image`(path, size, content_type, create_time)
+        VALUES (#{path}, #{size}, #{contentType}, CURRENT_TIMESTAMP)
+    </insert>
+
+    <select id="getImageIdByPath" parameterType="string" resultType="int">
+        SELECT `id`
+        FROM `image`
+        WHERE `path` = #{path}
+    </select>
+
+    <select id="getImageById" parameterType="int" resultType="image">
+        SELECT *
+        FROM `image`
+        WHERE `id` = #{id}
+    </select>
+</mapper>
