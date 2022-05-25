@@ -55,3 +55,4 @@ swagger:
 logging:
   level:
     root: info
+    io.swagger.models.parameters.AbstractSerializableParameter: error
