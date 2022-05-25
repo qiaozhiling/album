@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiParam
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import springfox.documentation.annotations.ApiIgnore
+import javax.servlet.http.HttpServletRequest
 
 @Api(description = "相册相关")
 @RestController
@@ -86,8 +87,10 @@ class AlbumController {
         @RequestParam(name = "albumId", required = true) albumId: Int,
         @RequestParam(name = "pageSize", required = true) pageSize: Int,
         @RequestParam(name = "index", required = true) index: Int,
-        loginUser: LoginUser
+        @ApiIgnore request: HttpServletRequest,
+        @ApiIgnore loginUser: LoginUser
     ): ComResult<Pages<ImageVo>> {
-        return albumService.getImages(albumId, pageSize, index, loginUser.id)
+        val host = request.requestURL.replace(request.requestURI.toRegex(), "")
+        return albumService.getImages(albumId, pageSize, index, loginUser.id,host)
     }
 }

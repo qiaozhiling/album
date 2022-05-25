@@ -22,20 +22,11 @@ class AlbumServiceImpl : AlbumService {
     @Value("\${server.servlet.context-path}")
     private lateinit var contentPath: String
 
-    @Value("\${server.port}")
-    private lateinit var port: String
-
-    @Value("\${server.ip}")
-    private lateinit var ip: String
-
-    private fun address() = "$ip:$port"
-
     @Autowired
     private lateinit var imageDao: ImageDao
 
     @Autowired
     private lateinit var imalDao: ImalDao
-
 
     @Autowired
     private lateinit var albumDao: AlbumDao
@@ -171,7 +162,7 @@ class AlbumServiceImpl : AlbumService {
         }
     }
 
-    override fun getImages(albumId: Int, pageSize: Int, index: Int, id: Int): ComResult<Pages<ImageVo>> {
+    override fun getImages(albumId: Int, pageSize: Int, index: Int, id: Int, host: String): ComResult<Pages<ImageVo>> {
         return try {
             val album = albumDao.getAlbumById(albumId) ?: return ComResult.er("相册不存在")
             if (album.owner != id && album.private) {
@@ -185,7 +176,7 @@ class AlbumServiceImpl : AlbumService {
                 "offset" to offset
             )
             val imageVos = imalDao.getImageVoByAlbumId(map).map {
-                it.url = "http://" + address() + contentPath + "/image/" + albumId + "/" + it.iid
+                it.url = host + contentPath + "/image/" + albumId + "/" + it.iid
                 it
             }
 

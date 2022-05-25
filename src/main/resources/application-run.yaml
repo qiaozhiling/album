@@ -29,7 +29,6 @@ mybatis:
     cache-enabled: true
 
 server:
-  ip: 124.221.237.241
   port: 8081
   white: /user/token, /user/new, /, /v2/api-docs, /api/*, /webjars/*, /swagger*
   servlet:
@@ -47,9 +46,12 @@ myjwt:
 images:
   path: 'C:\wwwroot\qiao'
 
-
 swagger:
   enable: true
   application-name: 云相册
   application-version: 1.0
   application-description: 云相册
+
+logging:
+  level:
+    root: info

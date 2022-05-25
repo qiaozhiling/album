@@ -31,6 +31,7 @@ class UserArgumentResolver : HandlerMethodArgumentResolver {
         val token = request!!.getHeader(jwtProperties.header)
         val redisKey = jwtProperties.redisKey + JwtUtil.getClaimsByToken(token).subject
         return RedisUtils.get(redisKey) as LoginUser?
+
     }
 
 }

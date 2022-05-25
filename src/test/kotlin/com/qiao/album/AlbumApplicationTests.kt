@@ -1,7 +1,6 @@
 package com.qiao.album
 
 import com.qiao.album.config.JwtProperties
-import com.qiao.album.dao.UserDao
 import com.qiao.album.utils.FileUtil
 import com.qiao.album.utils.PasswordEncoder
 import com.qiao.album.utils.logi
@@ -9,6 +8,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
+import java.net.InetAddress
 
 @SpringBootTest
 class AlbumApplicationTests {
@@ -49,6 +49,10 @@ class AlbumApplicationTests {
         println(whiteApi)
     }
 
-
+    @Test
+    fun test5() {
+        val hostAddress = InetAddress.getLocalHost().hostAddress
+        println(hostAddress)
+    }
 
 }

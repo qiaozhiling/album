@@ -2,10 +2,7 @@ package com.qiao.album.filter
 
 import com.qiao.album.config.JwtProperties
 import com.qiao.album.pojo.domain.LoginUser
-import com.qiao.album.utils.JwtUtil
-import com.qiao.album.utils.RedisUtils
-import com.qiao.album.utils.mat
-import com.qiao.album.utils.unauth
+import com.qiao.album.utils.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.web.ServerProperties
@@ -43,11 +40,16 @@ class JwtTokenAuthFilter : OncePerRequestFilter() {
         filterChain: FilterChain
     ) {
         response.contentType = "application/json;charset=utf8"
-        request.characterEncoding="UTF-8"
-        if (request.requestURI.mat(whitePath)) {
-            filterChain.doFilter(request, response)
-            return
+        request.characterEncoding = "UTF-8"
+        try {
+            if (request.requestURI.mat(whitePath)) {
+                filterChain.doFilter(request, response)
+                return
+            }
+        } catch (e: Exception) {
+            loge("e {}", e)
         }
+
         var token = request.getHeader(jwtProperties.header)
         if (token == null) {
             response.unauth()
