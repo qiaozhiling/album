@@ -135,29 +135,29 @@ class AlbumServiceImpl : AlbumService {
     }
 
     override fun getImage(albumId: Int, imalId: Int, userId: Int, response: HttpServletResponse) {
-        val album = albumDao.getAlbumById(albumId)
-        if (album == null) {
-            response.no()
-            return
-        }
-        if (album.owner != userId && album.private) {
-            response.forbid()
-            return
-        }
-        val imageId = imalDao.getImageIdById(imalId)
-        if (imageId == null) {
-            response.no()
-            return
-        }
-        val image = imageDao.getImageById(imageId)
-        if (image == null) {
-            response.no()
-            return
-        }
         try {
+            val album = albumDao.getAlbumById(albumId)
+            if (album == null) {
+                response.no()
+                return
+            }
+            if (album.owner != userId && album.private) {
+                response.forbid()
+                return
+            }
+            val imageId = imalDao.getImageIdById(imalId)
+            if (imageId == null) {
+                response.no()
+                return
+            }
+            val image = imageDao.getImageById(imageId)
+            if (image == null) {
+                response.no()
+                return
+            }
             FileUtil.load(image, response)
         } catch (e: Exception) {
-            loge("获取图片失败 albumId:{} imalId:{} imageId:{}", albumId, imalId, imageId)
+            loge("获取图片失败 e:{} albumId:{} imalId:{}", e, albumId, imalId)
             response.no()
         }
     }

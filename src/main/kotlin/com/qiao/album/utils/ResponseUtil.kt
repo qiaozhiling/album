@@ -9,9 +9,9 @@ fun HttpServletResponse.unauth() {
 }
 
 fun HttpServletResponse.unauth(msg: String) {
-    contentType = "application/json;charset=gbk"
-    characterEncoding = "gbk"
-    logi("未登入")
+    contentType = "application/json;charset=utf8"
+//    characterEncoding = "gbk"
+    logi(msg)
     status = HttpServletResponse.SC_UNAUTHORIZED
     val result = ComResult.er<String>(msg)
     outputStream.run {
@@ -35,8 +35,8 @@ fun HttpServletResponse.no() {
 }
 
 fun HttpServletResponse.forbid() {
-    contentType = "application/json;charset=gbk"
-    characterEncoding = "gbk"
+    contentType = "application/json;charset=utf8"
+//    characterEncoding = "gbk"
     status = HttpServletResponse.SC_FORBIDDEN
     val result = ComResult.er<Any>("宁无权查看")
     outputStream.run {
@@ -47,8 +47,8 @@ fun HttpServletResponse.forbid() {
 
 
 fun HttpServletResponse.no(msg: String) {
-    contentType = "application/json;charset=gbk"
-    characterEncoding = "gbk"
+    contentType = "application/json;charset=utf8"
+//    characterEncoding = "gbk"
     status = HttpServletResponse.SC_NOT_FOUND
     val result = ComResult.er<Any>(msg)
     outputStream.run {

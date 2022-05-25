@@ -39,8 +39,8 @@ class JwtTokenAuthFilter : OncePerRequestFilter() {
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        response.contentType = "application/json;charset=utf8"
-        request.characterEncoding = "UTF-8"
+        response.characterEncoding="utf8"
+        request.characterEncoding = "utf8"
         try {
             if (request.requestURI.mat(whitePath)) {
                 filterChain.doFilter(request, response)
