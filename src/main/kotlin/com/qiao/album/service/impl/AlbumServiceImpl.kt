@@ -41,7 +41,7 @@ class AlbumServiceImpl : AlbumService {
                 ComResult.er("相册已经存在")
             } else {
                 albumDao.newAlbum(album)
-                ComResult.ok("新建相册成功", null)
+                ComResult.ok("新建相册成功")
             }
         } catch (e: Exception) {
             loge("新建相册失败 {}", e)
@@ -107,7 +107,7 @@ class AlbumServiceImpl : AlbumService {
             return ComResult.er("没有上传权限哦")
         }
         if (albumDao.hasRight(album) > 1) {
-            loge("相册数量>1 {}", album)
+            logi("相册数量>1 {}", album)
             return ComResult.er("同相册数量>1")
         }
         var a = 0
