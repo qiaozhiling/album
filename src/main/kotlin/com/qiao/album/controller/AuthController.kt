@@ -24,7 +24,7 @@ class AuthController {
     @Autowired
     private lateinit var authService: AuthService
 
-    @ApiOperation(value = "获取token")
+    @ApiOperation(value = "获取token，并登入")
     @PostMapping("/token")
     fun token(
         @ApiParam(name = "用户名", required = true) @RequestParam(required = true) username: String,
@@ -33,6 +33,7 @@ class AuthController {
         return authService.getToken(username, password)
     }
 
+    @ApiOperation(value = "新建用户")
     @PostMapping("/new")
     fun register(
         @RequestParam(name = "username", required = true) name: String,
@@ -43,11 +44,13 @@ class AuthController {
         return authService.register(user)
     }
 
+    @ApiOperation(value = "注销")
     @GetMapping("/logout")
     fun logout(@ApiIgnore user: LoginUser): ComResult<String?> {
         return authService.logout(user.id)
     }
 
+    @ApiOperation(value = "通过用户id获取用户")
     @PostMapping("/{userId}")
     fun getUser(
         @PathVariable("userId") userId: Int
