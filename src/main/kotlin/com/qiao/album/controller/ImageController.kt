@@ -31,9 +31,10 @@ class ImageController {
     fun upload(
         @ApiParam(name = "相册id", required = true)
         @RequestParam(name = "albumId", required = true) albumId: Int,
+        @ApiParam(name = "图片文件 MultipartFile", required = true)
         @RequestParam(name = "images", required = true) images: Array<MultipartFile>,
-        httpServletRequest: MultipartHttpServletRequest,
-        loginUser: LoginUser
+        @ApiIgnore httpServletRequest: MultipartHttpServletRequest,
+        @ApiIgnore loginUser: LoginUser
     ): ComResult<Int> {
         val album = Album().apply {
             id = albumId
@@ -56,11 +57,12 @@ class ImageController {
 
     @PostMapping("/delete")
     fun deleteImage(
+        @ApiParam(name = "相册id", required = true)
         @RequestParam(required = true, name = "albumId") albumId: Int,
         @ApiParam(name = "记录id", required = true)
         @RequestParam(required = true, name = "iids") imalIds: ArrayList<Int>,
-        response: HttpServletResponse,
-        loginUser: LoginUser
+        @ApiIgnore response: HttpServletResponse,
+        @ApiIgnore loginUser: LoginUser
     ): ComResult<String> {
         val album = Album().apply {
             owner = loginUser.id
