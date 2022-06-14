@@ -37,8 +37,8 @@ class AlbumController {
         return albumService.newAlbum(album)
     }
 
-    @ApiOperation("获取用户相册")
-    @PostMapping("/get")
+    @ApiOperation("获取用户相册 pageSize一页的大小 index第几页(1，2，3，...)")
+    @PostMapping("/my")
     fun getUserAlbum(
         @RequestParam(name = "pageSize", required = true) pageSize: Int,
         @RequestParam(name = "index", required = true) index: Int,
