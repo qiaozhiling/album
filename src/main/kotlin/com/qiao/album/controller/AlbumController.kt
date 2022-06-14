@@ -44,7 +44,7 @@ class AlbumController {
         @RequestParam(name = "index", required = true) index: Int,
         @ApiIgnore loginUser: LoginUser
     ): ComResult<Pages<Album>> {
-        return albumService.getAlbum(pageSize, index, loginUser.id)
+        return albumService.getMyAlbum(pageSize, index, loginUser.id)
     }
 
     @ApiOperation("获取所有的开放相册")
