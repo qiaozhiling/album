@@ -49,7 +49,7 @@ class JwtTokenAuthFilter : OncePerRequestFilter() {
             }
         } catch (e: Exception) {
             loge("e {}", e)
-            response.sendError(501, "UNKNOWN ERROR")
+            response.no("未知错误")
             return
         }
 
