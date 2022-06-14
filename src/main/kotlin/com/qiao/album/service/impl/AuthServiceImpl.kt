@@ -34,7 +34,7 @@ class AuthServiceImpl : AuthService {
             val loginUser = LoginUser(user)
             RedisUtils.set(jwtProperties.redisKey + user.id, loginUser, jwtProperties.expire)
             val token = JwtUtil.generateToken("" + user.id)
-            logi("登入成功 {}", user)
+            logd("登入成功 {}", user)
             return ComResult.ok("登入成功", token)
         } catch (e: Exception) {
             loge("登入失败 {}", e)
@@ -58,10 +58,10 @@ class AuthServiceImpl : AuthService {
         return try {
             val re = userDao.addUser(user)
             if (re == 1) {
-                logi("登入成功 {}", user)
+                logd("登入成功 {}", user)
                 ComResult.ok("创建成功")
             } else {
-                logi("登入成功 {}", user)
+                logd("登入成功 {}", user)
                 ComResult.er("创建用户失败")
             }
         } catch (e: DuplicateKeyException) {
@@ -75,7 +75,7 @@ class AuthServiceImpl : AuthService {
     override fun logout(userId: Int): ComResult<String?> {
         val redisKey = jwtProperties.redisKey + userId
         return if (RedisUtils.del(redisKey)) {
-            logi("注销 $userId")
+            logd("注销 $userId")
             ComResult.ok("注销成功")
         } else {
             loge("注销失败 userId:{}", userId)

@@ -15,11 +15,19 @@ interface AlbumDao {
     // 分页获取用户相册
     fun getAlbumByUserId(map: Map<String, Any>): ArrayList<Album>
 
+    // 分页获取开放相册
+    fun getOpenAlbum(map: Map<String, Int>): ArrayList<Album>
+
     /**
      * @param id 用户的id
      * @return 返回用户的总相册数量
      */
     fun getAlbumCount(id: Int): Int
+
+    /**
+     * 获取开放相册数量
+     */
+    fun getOpenAlbumCount(): Int
 
     fun deleteAlbum(album: Album): Int
 

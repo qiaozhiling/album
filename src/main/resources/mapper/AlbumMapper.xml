@@ -25,11 +25,26 @@
         LIMIT #{offset},#{pageSize}
     </select>
 
+    <select id="getOpenAlbum" parameterType="map" resultType="album">
+        SELECT *
+        FROM `album`
+        WHERE `is_private` = FALSE
+          AND `deleted` = FALSE
+        LIMIT #{offset},#{pageSize}
+    </select>
+
     <select id="getAlbumCount" resultType="int">
         SELECT COUNT(*)
         FROM `album`
         WHERE `owner` = #{id}
           AND `deleted` = FALSE
+    </select>
+
+    <select id="getOpenAlbumCount" resultType="int">
+        SELECT COUNT(*)
+        FROM `album`
+        WHERE is_private = FALSE
+          AND deleted = FALSE
     </select>
 
     <update id="deleteAlbum" parameterType="album">

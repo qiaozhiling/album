@@ -54,9 +54,7 @@ class AlbumServiceImpl : AlbumService {
             val total = albumDao.getAlbumCount(id)
             val offset = pageSize * (index - 1)
             val map = mapOf(
-                "id" to id,
-                "pageSize" to pageSize,
-                "offset" to offset
+                "id" to id, "pageSize" to pageSize, "offset" to offset
             )
             val albumList = albumDao.getAlbumByUserId(map)
             val pages = Pages<Album>().apply {
@@ -65,7 +63,7 @@ class AlbumServiceImpl : AlbumService {
                 this.index = index
                 this.size = pageSize
             }
-            logi("获取")
+            logd("获取")
             return ComResult.ok("获取成功", pages)
         } catch (e: Exception) {
             loge("获取相册失败 {}", e)
@@ -107,7 +105,7 @@ class AlbumServiceImpl : AlbumService {
             return ComResult.er("没有上传权限哦")
         }
         if (albumDao.hasRight(album) > 1) {
-            logi("相册数量>1 {}", album)
+            logd("相册数量>1 {}", album)
             return ComResult.er("同相册数量>1")
         }
         var a = 0
@@ -116,9 +114,7 @@ class AlbumServiceImpl : AlbumService {
                 fileService.run {
                     val imageId = saveImg(file)
                     val map = mapOf(
-                        "albumId" to album.id,
-                        "imageId" to imageId,
-                        "imageName" to file.originalFilename!!
+                        "albumId" to album.id, "imageId" to imageId, "imageName" to file.originalFilename!!
                     )
                     imalDao.addImal(map)
                 }
@@ -171,9 +167,7 @@ class AlbumServiceImpl : AlbumService {
             val total = imalDao.getImageCount(albumId)
             val offset = pageSize * (index - 1)
             val map = mapOf(
-                "albumId" to albumId,
-                "pageSize" to pageSize,
-                "offset" to offset
+                "albumId" to albumId, "pageSize" to pageSize, "offset" to offset
             )
             val imageVos = imalDao.getImageVoByAlbumId(map).map {
                 it.url = host + contentPath + "/image/" + albumId + "/" + it.iid
@@ -209,5 +203,28 @@ class AlbumServiceImpl : AlbumService {
             return ComResult.er("删除失败")
         }
 
+    }
+
+    override fun getOpenAlbum(pageSize: Int, index: Int): ComResult<Pages<Album>> {
+        return try {
+            val total = albumDao.getOpenAlbumCount()
+            val offset = pageSize * (index - 1)
+            val map = mapOf(
+                "pageSize" to pageSize,
+                "offset" to offset
+            )
+            val albumList = albumDao.getOpenAlbum(map)
+            val pages = Pages<Album>().apply {
+                records = albumList
+                this.total = total
+                this.index = index
+                this.size = pageSize
+            }
+            logd("获取open相册")
+            ComResult.ok("获取成功", pages)
+        } catch (e: Exception) {
+            logd("获取open相册失败 {}", e)
+            ComResult.er("获取失败")
+        }
     }
 }

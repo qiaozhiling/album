@@ -27,8 +27,8 @@ class AuthController {
     @ApiOperation(value = "获取token，并登入")
     @PostMapping("/token")
     fun token(
-        @ApiParam(name = "用户名", required = true) @RequestParam(required = true) username: String,
-        @ApiParam(name = "用户密码", required = true) @RequestParam(required = true) password: String
+        @ApiParam(name = "username", required = true) @RequestParam(required = true) username: String,
+        @ApiParam(name = "password", required = true) @RequestParam(required = true) password: String
     ): ComResult<String?> {
         return authService.getToken(username, password)
     }

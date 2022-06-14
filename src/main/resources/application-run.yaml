@@ -30,7 +30,7 @@ mybatis:
 
 server:
   port: 8081
-  white: /user/token, /user/new, /, /v2/api-docs, /api/*, /webjars/*, /swagger*
+  white: /user/token, /user/new, /, /v2/api-docs, /api/*, /webjars/*, /swagger*, /csrf
   servlet:
     context-path: /a
     encoding:
@@ -54,5 +54,5 @@ swagger:
 
 logging:
   level:
-    root: info
+    root: debug
     io.swagger.models.parameters.AbstractSerializableParameter: error

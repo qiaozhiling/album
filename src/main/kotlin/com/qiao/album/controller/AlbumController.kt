@@ -47,6 +47,14 @@ class AlbumController {
         return albumService.getAlbum(pageSize, index, loginUser.id)
     }
 
+    @ApiOperation("获取所有的开放相册")
+    @PostMapping("/open")
+    fun getOpenAlbum(
+        @RequestParam(name = "pageSize", required = true) pageSize: Int,
+        @RequestParam(name = "index", required = true) index: Int
+    ): ComResult<Pages<Album>> {
+        return albumService.getOpenAlbum(pageSize, index)
+    }
 
     @ApiOperation("删除用户相册")
     @PostMapping("/delete")
@@ -91,6 +99,6 @@ class AlbumController {
         @ApiIgnore loginUser: LoginUser
     ): ComResult<Pages<ImageVo>> {
         val host = request.requestURL.replace(request.requestURI.toRegex(), "")
-        return albumService.getImages(albumId, pageSize, index, loginUser.id,host)
+        return albumService.getImages(albumId, pageSize, index, loginUser.id, host)
     }
 }
