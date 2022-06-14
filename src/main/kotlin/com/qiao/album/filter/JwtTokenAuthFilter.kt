@@ -55,10 +55,12 @@ class JwtTokenAuthFilter : OncePerRequestFilter() {
 
         var token = request.getHeader(jwtProperties.header)
         if (token == null) {
+            logd("未登入1")
             response.unauth()
             return
         }
         if (!token.startsWith(jwtProperties.startWith)) {
+            logd("未登入2")
             response.unauth()
             return
         }
@@ -66,20 +68,21 @@ class JwtTokenAuthFilter : OncePerRequestFilter() {
         val claims = try {
             JwtUtil.getClaimsByToken(token)
         } catch (e: ExpiredJwtException) {
+            logd("token过期")
             response.unauth("token过期")
             return
         } catch (e: Exception) {
+            logd("token解析错误")
             response.unauth("token解析错误")
             return
         }
         val redisKey = jwtProperties.redisKey + claims.subject
         val loginUser = RedisUtils.get(redisKey) as LoginUser?
         if (loginUser == null) {
+            logd("未登入3")
             response.unauth()
             return
         }
         filterChain.doFilter(request, response)
     }
-
-
 }
