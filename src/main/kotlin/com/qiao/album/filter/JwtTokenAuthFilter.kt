@@ -3,6 +3,7 @@ package com.qiao.album.filter
 import com.qiao.album.config.JwtProperties
 import com.qiao.album.pojo.domain.LoginUser
 import com.qiao.album.utils.*
+import io.jsonwebtoken.ExpiredJwtException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.web.ServerProperties
@@ -39,7 +40,7 @@ class JwtTokenAuthFilter : OncePerRequestFilter() {
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        response.characterEncoding="utf8"
+        response.characterEncoding = "utf8"
         request.characterEncoding = "utf8"
         try {
             if (request.requestURI.mat(whitePath)) {
@@ -48,6 +49,8 @@ class JwtTokenAuthFilter : OncePerRequestFilter() {
             }
         } catch (e: Exception) {
             loge("e {}", e)
+            response.sendError(501, "UNKNOWN ERROR")
+            return
         }
 
         var token = request.getHeader(jwtProperties.header)
@@ -60,9 +63,13 @@ class JwtTokenAuthFilter : OncePerRequestFilter() {
             return
         }
         token = token.replace(jwtProperties.startWith, "")
-        val claims = JwtUtil.getClaimsByToken(token)
-        if (JwtUtil.isTokenExpired(claims)) {
-            response.unauth("token已过期")
+        val claims = try {
+            JwtUtil.getClaimsByToken(token)
+        } catch (e: ExpiredJwtException) {
+            response.unauth("token过期")
+            return
+        } catch (e: Exception) {
+            response.unauth("token解析错误")
             return
         }
         val redisKey = jwtProperties.redisKey + claims.subject
