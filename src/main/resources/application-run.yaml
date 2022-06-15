@@ -29,6 +29,8 @@ mybatis:
     cache-enabled: true
 
 server:
+  ssl:
+    enabled: false
   port: 8081
   white: /user/token, /user/new, /, /v2/api-docs, /api/*, /webjars/*, /swagger*, /csrf
   servlet:
@@ -48,9 +50,9 @@ images:
 
 swagger:
   enable: true
-  application-name: 云相册
+  application-name: 云相册接口文档!!
   application-version: 1.0
-  application-description: 云相册
+  application-description: 只是接口文档，测试功能没有维护，用来看的。测试环境Postman v9.21.2，测完再写！
 
 logging:
   level:
