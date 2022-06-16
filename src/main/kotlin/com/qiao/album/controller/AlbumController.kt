@@ -23,13 +23,13 @@ class AlbumController {
     private lateinit var albumService: AlbumService
 
     @ApiOperation("新建相册")
-    @PostMapping("/new")
+    @PostMapping("/new", consumes = ["multipart/form-data"])
     fun newAlbum(
-        @ApiParam(name = "相册名字", required = true)
+        @ApiParam(value = "相册名字", required = true)
         @RequestParam(name = "name") name: String,
-        @ApiParam(name = "相册描述", required = true)
+        @ApiParam(value = "相册描述", required = true)
         @RequestParam(name = "describe", defaultValue = "") describe: String,
-        @ApiParam(name = "相册是否私有", required = false)
+        @ApiParam(value = "相册是否私有", required = false)
         @RequestParam(name = "private", defaultValue = "true") private: Boolean,
         @ApiIgnore loginUser: LoginUser
     ): ComResult<String?> {
@@ -37,29 +37,29 @@ class AlbumController {
         return albumService.newAlbum(album)
     }
 
-    @ApiOperation("获取用户相册 pageSize一页的大小 index第几页(1，2，3，...)")
-    @PostMapping("/my")
+    @ApiOperation("获取用户相册")
+    @PostMapping("/my", consumes = ["multipart/form-data"])
     fun getUserAlbum(
-        @RequestParam(name = "pageSize", required = true) pageSize: Int,
-        @RequestParam(name = "index", required = true) index: Int,
+        @ApiParam(value = "一页的大小", required = true) @RequestParam(name = "pageSize", required = true) pageSize: Int,
+        @ApiParam(value = "第几页(1，2，3，...)", required = true) @RequestParam(name = "index", required = true) index: Int,
         @ApiIgnore loginUser: LoginUser
     ): ComResult<Pages<Album>> {
         return albumService.getMyAlbum(pageSize, index, loginUser.id)
     }
 
     @ApiOperation("获取所有的开放相册")
-    @PostMapping("/open")
+    @PostMapping("/open", consumes = ["multipart/form-data"])
     fun getOpenAlbum(
-        @RequestParam(name = "pageSize", required = true) pageSize: Int,
-        @RequestParam(name = "index", required = true) index: Int
+        @ApiParam(value = "一页的大小", required = true) @RequestParam(name = "pageSize", required = true) pageSize: Int,
+        @ApiParam(value = "第几页(1，2，3，...)", required = true) @RequestParam(name = "index", required = true) index: Int
     ): ComResult<Pages<Album>> {
         return albumService.getOpenAlbum(pageSize, index)
     }
 
     @ApiOperation("删除用户相册")
-    @PostMapping("/delete")
+    @PostMapping("/delete", consumes = ["multipart/form-data"])
     fun deleteAlbum(
-        @ApiParam(name = "相册id", required = true) @RequestParam(name = "albumId", required = true) albumId: Int,
+        @ApiParam(value = "相册id", required = true) @RequestParam(name = "albumId", required = true) albumId: Int,
         @ApiIgnore loginUser: LoginUser
     ): ComResult<String?> {
         val album = Album().apply {
@@ -71,7 +71,7 @@ class AlbumController {
     }
 
     @ApiOperation("更新用户相册信息")
-    @PostMapping("/update")
+    @PostMapping("/update", consumes = ["multipart/form-data"])
     fun updateAlbum(
         @RequestParam(name = "albumId", required = true) albumId: Int,
         @RequestParam(name = "private", required = false) private: Boolean?,
@@ -90,11 +90,11 @@ class AlbumController {
     }
 
     @ApiOperation("获取相册的图")
-    @PostMapping("/images")
+    @PostMapping("/images", consumes = ["multipart/form-data"])
     fun getImages(
         @RequestParam(name = "albumId", required = true) albumId: Int,
-        @RequestParam(name = "pageSize", required = true) pageSize: Int,
-        @RequestParam(name = "index", required = true) index: Int,
+        @ApiParam(value = "一页的大小", required = true) @RequestParam(name = "pageSize", required = true) pageSize: Int,
+        @ApiParam(value = "第几页(1，2，3，...)", required = true) @RequestParam(name = "index", required = true) index: Int,
         @ApiIgnore request: HttpServletRequest,
         @ApiIgnore loginUser: LoginUser
     ): ComResult<Pages<ImageVo>> {

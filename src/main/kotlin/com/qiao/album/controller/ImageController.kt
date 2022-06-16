@@ -27,11 +27,14 @@ class ImageController {
 
 
     @ApiOperation("上传图片到相册")
-    @PostMapping("/upload")
+    @PostMapping("/upload", headers = ["content-type=multipart/form-data"])
     fun upload(
-        @ApiParam(name = "相册id", required = true)
+        @ApiParam(value = "相册id", required = true)
         @RequestParam(name = "albumId", required = true) albumId: Int,
-        @ApiParam(name = "图片文件 MultipartFile", required = true)
+        @ApiParam(
+            value = "图片文件 MultipartFile,swagger不支持在一个参数中上传文件数组，如果上传就会传递空值，建议测试多文件上传时用postman进行测试。https://blog.csdn.net/DravenLeft/article/details/106337529",
+            required = true
+        )
         @RequestParam(name = "images", required = true) images: Array<MultipartFile>,
         @ApiIgnore httpServletRequest: MultipartHttpServletRequest,
         @ApiIgnore loginUser: LoginUser
@@ -55,12 +58,10 @@ class ImageController {
         albumService.getImage(albumId, imalId, loginUser.id, response)
     }
 
-    @PostMapping("/delete")
+    @PostMapping("/delete", consumes = ["multipart/form-data"])
     fun deleteImage(
-        @ApiParam(name = "相册id", required = true)
-        @RequestParam(required = true, name = "albumId") albumId: Int,
-        @ApiParam(name = "记录id", required = true)
-        @RequestParam(required = true, name = "iids") imalIds: ArrayList<Int>,
+        @ApiParam(name = "相册id", required = true) @RequestParam(required = true, name = "albumId") albumId: Int,
+        @ApiParam(name = "记录id", required = true) @RequestParam(required = true, name = "iids") imalIds: ArrayList<Int>,
         @ApiIgnore response: HttpServletResponse,
         @ApiIgnore loginUser: LoginUser
     ): ComResult<String> {

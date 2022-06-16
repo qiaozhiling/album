@@ -25,16 +25,16 @@ class AuthController {
     private lateinit var authService: AuthService
 
     @ApiOperation(value = "获取token，并登入")
-    @PostMapping("/token")
+    @PostMapping("/token", consumes = ["multipart/form-data"])
     fun token(
-        @ApiParam(name = "username", required = true) @RequestParam(required = true) username: String,
-        @ApiParam(name = "password", required = true) @RequestParam(required = true) password: String
+        @ApiParam(value = "username", required = true) @RequestParam(required = true) username: String,
+        @ApiParam(value = "password", required = true) @RequestParam(required = true) password: String
     ): ComResult<String?> {
         return authService.getToken(username, password)
     }
 
     @ApiOperation(value = "新建用户")
-    @PostMapping("/new")
+    @PostMapping("/new", consumes = ["multipart/form-data"])
     fun register(
         @RequestParam(name = "username", required = true) name: String,
         @RequestParam(name = "password", required = true) password: String,
@@ -51,7 +51,7 @@ class AuthController {
     }
 
     @ApiOperation(value = "通过用户id获取用户")
-    @PostMapping("/{userId}")
+    @GetMapping("/{userId}")
     fun getUser(
         @PathVariable("userId") userId: Int
     ): ComResult<User> {
