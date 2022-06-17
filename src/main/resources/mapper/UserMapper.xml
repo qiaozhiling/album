@@ -16,7 +16,7 @@
     </select>
 
     <select id="selectUserById" resultType="user">
-        SELECT *
+        SELECT id, name, used, email, create_time, role, avatar
         FROM `user`
         WHERE `id` = #{id}
     </select>
