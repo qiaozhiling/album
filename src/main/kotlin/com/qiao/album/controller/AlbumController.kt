@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest
 
 @Api(description = "相册相关")
 @RestController
+@CrossOrigin(origins = ["*"])
 @RequestMapping("/album")
 class AlbumController {
 
@@ -23,7 +24,7 @@ class AlbumController {
     private lateinit var albumService: AlbumService
 
     @ApiOperation("新建相册")
-    @PostMapping("/new", consumes = ["multipart/form-data"])
+    @PostMapping("/new")
     fun newAlbum(
         @ApiParam(value = "相册名字", required = true)
         @RequestParam(name = "name") name: String,
@@ -38,7 +39,7 @@ class AlbumController {
     }
 
     @ApiOperation("获取用户相册")
-    @PostMapping("/my", consumes = ["multipart/form-data"])
+    @PostMapping("/my")
     fun getUserAlbum(
         @ApiParam(value = "一页的大小", required = true) @RequestParam(name = "pageSize", required = true) pageSize: Int,
         @ApiParam(value = "第几页(1，2，3，...)", required = true) @RequestParam(name = "index", required = true) index: Int,
@@ -48,7 +49,7 @@ class AlbumController {
     }
 
     @ApiOperation("获取所有的开放相册")
-    @PostMapping("/open", consumes = ["multipart/form-data"])
+    @PostMapping("/open")
     fun getOpenAlbum(
         @ApiParam(value = "一页的大小", required = true) @RequestParam(name = "pageSize", required = true) pageSize: Int,
         @ApiParam(value = "第几页(1，2，3，...)", required = true) @RequestParam(name = "index", required = true) index: Int
@@ -57,7 +58,7 @@ class AlbumController {
     }
 
     @ApiOperation("删除用户相册")
-    @PostMapping("/delete", consumes = ["multipart/form-data"])
+    @PostMapping("/delete" )
     fun deleteAlbum(
         @ApiParam(value = "相册id", required = true) @RequestParam(name = "albumId", required = true) albumId: Int,
         @ApiIgnore loginUser: LoginUser
@@ -71,7 +72,7 @@ class AlbumController {
     }
 
     @ApiOperation("更新用户相册信息")
-    @PostMapping("/update", consumes = ["multipart/form-data"])
+    @PostMapping("/update" )
     fun updateAlbum(
         @RequestParam(name = "albumId", required = true) albumId: Int,
         @RequestParam(name = "private", required = false) private: Boolean?,
@@ -90,7 +91,7 @@ class AlbumController {
     }
 
     @ApiOperation("获取相册的图")
-    @PostMapping("/images", consumes = ["multipart/form-data"])
+    @PostMapping("/images" )
     fun getImages(
         @RequestParam(name = "albumId", required = true) albumId: Int,
         @ApiParam(value = "一页的大小", required = true) @RequestParam(name = "pageSize", required = true) pageSize: Int,

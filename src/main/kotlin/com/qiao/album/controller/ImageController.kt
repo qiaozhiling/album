@@ -4,21 +4,19 @@ import com.qiao.album.pojo.domain.LoginUser
 import com.qiao.album.pojo.dto.ComResult
 import com.qiao.album.pojo.vo.Album
 import com.qiao.album.service.AlbumService
+import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiParam
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.multipart.MultipartHttpServletRequest
 import springfox.documentation.annotations.ApiIgnore
 import javax.servlet.http.HttpServletResponse
 
+@Api(description = "图片相关")
 @RestController
+@CrossOrigin(origins = ["*"])
 @RequestMapping("/image")
 class ImageController {
 
@@ -26,7 +24,7 @@ class ImageController {
     private lateinit var albumService: AlbumService
 
 
-    @ApiOperation("上传图片到相册")
+    @ApiOperation("上传图片到相册，失败返回失败的个数")
     @PostMapping("/upload", headers = ["content-type=multipart/form-data"])
     fun upload(
         @ApiParam(value = "相册id", required = true)
@@ -58,7 +56,7 @@ class ImageController {
         albumService.getImage(albumId, imalId, loginUser.id, response)
     }
 
-    @PostMapping("/delete", consumes = ["multipart/form-data"])
+    @PostMapping("/delete")
     fun deleteImage(
         @ApiParam(name = "相册id", required = true) @RequestParam(required = true, name = "albumId") albumId: Int,
         @ApiParam(name = "记录id", required = true) @RequestParam(required = true, name = "iids") imalIds: ArrayList<Int>,

@@ -40,15 +40,15 @@ class AlbumServiceImpl : AlbumService {
             val has = albumDao.hasSameAlbum(album)
             if (has != 0) {
                 logd("新建相册：失败 相册已经存在")
-                ComResult.er("相册已经存在")
+                ComResult.er("Album exists")
             } else {
                 albumDao.newAlbum(album)
                 logd("新建相册成功")
-                ComResult.ok("新建相册成功")
+                ComResult.ok("Album created success")
             }
         } catch (e: Exception) {
             loge("新建相册失败 {}", e)
-            ComResult.er("新建失败")
+            ComResult.er("Album created fail")
         }
     }
 
@@ -68,12 +68,11 @@ class AlbumServiceImpl : AlbumService {
                 this.size = pageSize
             }
             logd("获取用户相册：成功 ")
-            return ComResult.ok("获取成功", pages)
+            return ComResult.success(pages)
         } catch (e: Exception) {
             loge("获取用户相相册失败 {}", e)
-            return ComResult.er("获取失败")
+            return ComResult.fail()
         }
-
     }
 
     override fun getOpenAlbum(pageSize: Int, index: Int): ComResult<Pages<Album>> {
@@ -93,10 +92,10 @@ class AlbumServiceImpl : AlbumService {
                 this.size = pageSize
             }
             logd("获取开放相册：成功")
-            ComResult.ok("获取成功", pages)
+            ComResult.success(pages)
         } catch (e: Exception) {
             loge("获取开放相册：失败 {}", e)
-            ComResult.er("获取失败")
+            ComResult.fail()
         }
     }
 
@@ -106,14 +105,14 @@ class AlbumServiceImpl : AlbumService {
             val res = albumDao.deleteAlbum(album)
             if (res > 0) {
                 logd("删除相册成功")
-                ComResult.ok("删除成功")
+                ComResult.success()
             } else {
                 logd("删除相册：失败 相册不存在")
-                ComResult.er("相册不存在")
+                ComResult.er("Album does not exist")
             }
         } catch (e: Exception) {
             loge("删除相册失败 {}", e)
-            ComResult.er("删除失败")
+            ComResult.fail()
         }
     }
 
@@ -123,14 +122,14 @@ class AlbumServiceImpl : AlbumService {
             val has = albumDao.updateAlbum(album)
             if (has == 1) {
                 logd("更新相册信息：成功")
-                ComResult.ok("更新相册信息成功")
+                ComResult.success()
             } else {
                 logd("更新相册信息：fail 相册不存在")
-                ComResult.er("相册不存在")
+                ComResult.er("Album does not exist")
             }
         } catch (e: Exception) {
             loge("更新相册失败 {}", e)
-            ComResult.er("跟新相册信息失败")
+            ComResult.fail()
         }
     }
 
@@ -139,15 +138,15 @@ class AlbumServiceImpl : AlbumService {
         try {
             if (albumDao.hasRight(album) == 0) {
                 logd("上传图片：fail 没有上传权限")
-                return ComResult.er("没有上传权限")
+                return ComResult.er("no permission")
             }
             if (albumDao.hasRight(album) > 1) {
                 loge("没有上传权限 相册数量>1 {}", album)
-                return ComResult.er("同相册数量>1")
+                return ComResult.er("Number of same album >1")
             }
         } catch (e: Exception) {
             loge("上传图片：fail {}", e)
-            return ComResult.er("上传失败未知错误")
+            return ComResult.fail()
         }
         var counter = 0 // 出错个数
         images.forEach { file ->
@@ -166,10 +165,10 @@ class AlbumServiceImpl : AlbumService {
         }
         return if (counter == 0) {
             logd("上传图片：成功")
-            ComResult.ok("上传成功")
+            ComResult.success()
         } else {
             logd("上传图片：失败 counts{}", counter)
-            ComResult.er("上传失败", counter)
+            ComResult.er("upload fail", counter)
         }
     }
 
@@ -212,7 +211,7 @@ class AlbumServiceImpl : AlbumService {
         return try {
             val album = albumDao.getAlbumById(albumId) ?: return ComResult.er("相册不存在")
             if (album.owner != id && album.private) {
-                return ComResult.er("宁无权查看")
+                return ComResult.er("no permission")
             }
             val total = imalDao.getImageCount(albumId)
             val offset = pageSize * (index - 1)
@@ -230,27 +229,27 @@ class AlbumServiceImpl : AlbumService {
                 this.size = pageSize
                 records = imageVos
             }
-            ComResult.ok("获取成功", pages)
+            ComResult.success(pages)
         } catch (e: Exception) {
             loge("获取相册图片失败 {} albumid:{} userId:{} ", e, albumId, id)
-            ComResult.er("获取失败")
+            ComResult.fail()
         }
     }
 
     override fun deleteImage(album: Album, imalIds: ArrayList<Int>): ComResult<String> {
         try {
             if (albumDao.hasRight(album) == 0) {
-                return ComResult.er("没有上传权限哦")
+                return ComResult.er("no permission")
             }
             if (albumDao.hasRight(album) > 1) {
                 loge("相册数量>1 {}", album)
-                return ComResult.er("同相册数量>1")
+                return ComResult.er("Number of same album >1")
             }
             imalDao.deleteByIds(album.id, imalIds)
-            return ComResult.ok("删除成功")
+            return ComResult.ok("success")
         } catch (e: Exception) {
             loge("删除图片失败 {} imalIds:{}", e, imalIds)
-            return ComResult.er("删除失败")
+            return ComResult.fail()
         }
 
     }

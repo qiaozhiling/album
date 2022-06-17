@@ -8,16 +8,12 @@ import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiParam
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import springfox.documentation.annotations.ApiIgnore
 
 @Api(description = "用户相关")
 @RestController
+@CrossOrigin(origins = ["*"])
 @RequestMapping("/user")
 class AuthController {
 
@@ -25,7 +21,7 @@ class AuthController {
     private lateinit var authService: AuthService
 
     @ApiOperation(value = "获取token，并登入")
-    @PostMapping("/token", consumes = ["multipart/form-data"])
+    @PostMapping("/token")
     fun token(
         @ApiParam(value = "username", required = true) @RequestParam(required = true) username: String,
         @ApiParam(value = "password", required = true) @RequestParam(required = true) password: String
@@ -34,7 +30,7 @@ class AuthController {
     }
 
     @ApiOperation(value = "新建用户")
-    @PostMapping("/new", consumes = ["multipart/form-data"])
+    @PostMapping("/new")
     fun register(
         @RequestParam(name = "username", required = true) name: String,
         @RequestParam(name = "password", required = true) password: String,

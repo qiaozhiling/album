@@ -49,18 +49,18 @@ class JwtTokenAuthFilter : OncePerRequestFilter() {
             }
         } catch (e: Exception) {
             loge("e {}", e)
-            response.no("未知错误")
+            response.unknown()
             return
         }
 
         var token = request.getHeader(jwtProperties.header)
         if (token == null) {
-            logd("未登入1")
+            logd("未登入 位置 1")
             response.unauth()
             return
         }
         if (!token.startsWith(jwtProperties.startWith)) {
-            logd("未登入2")
+            logd("未登入 位置 2")
             response.unauth()
             return
         }
@@ -69,17 +69,17 @@ class JwtTokenAuthFilter : OncePerRequestFilter() {
             JwtUtil.getClaimsByToken(token)
         } catch (e: ExpiredJwtException) {
             logd("token过期")
-            response.unauth("token过期")
+            response.unauth("token expired")
             return
         } catch (e: Exception) {
             logd("token解析错误")
-            response.unauth("token解析错误")
+            response.unauth("token failed")
             return
         }
         val redisKey = jwtProperties.redisKey + claims.subject
         val loginUser = RedisUtils.get(redisKey) as LoginUser?
         if (loginUser == null) {
-            logd("未登入3")
+            logd("未登入 位置 3")
             response.unauth()
             return
         }

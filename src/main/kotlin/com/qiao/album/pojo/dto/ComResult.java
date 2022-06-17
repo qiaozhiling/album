@@ -19,11 +19,19 @@ public class ComResult<T> {
     }
 
     public static <T> ComResult<T> ok(String msg) {
-        return new ComResult<>(CODE_OK, msg, null);
+        return ComResult.ok(msg, null);
     }
 
     public static <T> ComResult<T> ok(String msg, T data) {
         return new ComResult<>(CODE_OK, msg, data);
+    }
+
+    public static <T> ComResult<T> success(T data) {
+        return ComResult.ok("success", data);
+    }
+
+    public static <T> ComResult<T> success() {
+        return ComResult.success(null);
     }
 
     public static <T> ComResult<T> er(String msg, T data) {
@@ -31,7 +39,11 @@ public class ComResult<T> {
     }
 
     public static <T> ComResult<T> er(String msg) {
-        return new ComResult<>(CODE_BD, msg, null);
+        return ComResult.er(msg, null);
+    }
+
+    public static <T> ComResult<T> fail() {
+        return ComResult.er("fail");
     }
 
     public byte[] toByteArray() {

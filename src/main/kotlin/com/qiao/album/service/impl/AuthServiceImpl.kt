@@ -22,23 +22,23 @@ class AuthServiceImpl : AuthService {
     override fun getToken(username: String, password: String): ComResult<String?> {
         try {
             if (password.length !in 6..18) {
-                return ComResult.er("密码长度异常")
+                return ComResult.er("Abnormal password length")
             }
             if (username.length !in 2..30) {
-                return ComResult.er("用户名长度异常")
+                return ComResult.er("Abnormal user name length")
             }
-            val user: User = userDao.selectUserByName(username) ?: return ComResult.er("用户不存在")
+            val user: User = userDao.selectUserByName(username) ?: return ComResult.er("user does not exist")
             if (user.password != PasswordEncoder.encode(password)) {
-                return ComResult.er("密码错误")
+                return ComResult.er("Password error")
             }
             val loginUser = LoginUser(user)
             RedisUtils.set(jwtProperties.redisKey + user.id, loginUser, jwtProperties.expire)
             val token = JwtUtil.generateToken("" + user.id)
             logd("登入成功 {}", user)
-            return ComResult.ok("登入成功", token)
+            return ComResult.ok("Login success", token)
         } catch (e: Exception) {
             loge("登入失败 {}", e)
-            return ComResult.er("登入失败")
+            return ComResult.er("Login fail")
         }
 
     }
@@ -46,29 +46,30 @@ class AuthServiceImpl : AuthService {
     override fun register(user: User): ComResult<String?> {
         val regex = Regex("^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+\$")
         if (!user.email.matches(regex)) {
-            return ComResult.er("邮箱格式错误")
+            return ComResult.er("Mailbox format error")
         }
         if (user.password.length !in 6..18) {
-            return ComResult.er("密码长度异常")
+            return ComResult.er("Abnormal password length")
         }
         if (user.name.length !in 2..30) {
-            return ComResult.er("用户名长度异常")
+            return ComResult.er("Abnormal user name length")
         }
         user.password = PasswordEncoder.encode(user.password)
         return try {
             val re = userDao.addUser(user)
             if (re == 1) {
-                logd("登入成功 {}", user)
-                ComResult.ok("创建成功")
+                logd("注册成功 {}", user)
+                ComResult.ok("User created success")
             } else {
-                logd("登入成功 {}", user)
-                ComResult.er("创建用户失败")
+                logd("注册失败 {}", user)
+                ComResult.er("User created fail")
             }
         } catch (e: DuplicateKeyException) {
-            ComResult.er("用户已存在")
+            logd("注册失败 用户存在 {}", user)
+            ComResult.er("User exists")
         } catch (e: Exception) {
             loge("创建用户失败 {}", e)
-            ComResult.er("创建用户失败")
+            ComResult.er("User created fail")
         }
     }
 
@@ -76,16 +77,16 @@ class AuthServiceImpl : AuthService {
         val redisKey = jwtProperties.redisKey + userId
         return if (RedisUtils.del(redisKey)) {
             logd("注销 $userId")
-            ComResult.ok("注销成功")
+            ComResult.ok("Logout success")
         } else {
             loge("注销失败 userId:{}", userId)
-            ComResult.er("注销失败")
+            ComResult.er("Logout fail")
         }
     }
 
     override fun getUser(userId: Int): ComResult<User> {
-        val user = userDao.selectUserById(userId) ?: return ComResult.er("用户不存在")
-        return ComResult.ok("查询成功", user)
+        val user = userDao.selectUserById(userId) ?: return ComResult.er("User does not exist")
+        return ComResult.ok("Query success", user)
     }
 
     //    override fun password(oldPassword: String, newPassword: String, userId: Int): ComResult<String> {
