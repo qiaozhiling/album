@@ -172,8 +172,8 @@ class AlbumServiceImpl : AlbumService {
         }
     }
 
-    override fun getImage(albumId: Int, imalId: Int, userId: Int, response: HttpServletResponse) {
-        logd("获取单张图片 albumId{} imalId{} userId{}", albumId, imalId, userId)
+    override fun getImage(albumId: Int, imalId: Int,  response: HttpServletResponse) {
+        logd("获取单张图片 albumId imalId userId{}", albumId, imalId)
         try {
             val album = albumDao.getAlbumById(albumId)
             if (album == null) {
@@ -181,11 +181,11 @@ class AlbumServiceImpl : AlbumService {
                 response.no()
                 return
             }
-            if (album.owner != userId && album.private) {
-                logd("获取单张图片：fail 没权限")
-                response.forbid()
-                return
-            }
+//            if (album.owner != userId && album.private) {
+//                logd("获取单张图片：fail 没权限")
+//                response.forbid()
+//                return
+//            }
             val imageId = imalDao.getImageIdById(imalId)
             if (imageId == null) {
                 logd("获取单张图片：fail 图片id不存在")
@@ -219,7 +219,7 @@ class AlbumServiceImpl : AlbumService {
                 "albumId" to albumId, "pageSize" to pageSize, "offset" to offset
             )
             val imageVos = imalDao.getImageVoByAlbumId(map).map {
-                it.url = host + contentPath + "/image/" + albumId + "/" + it.iid
+                it.url = host + contentPath + "/image/get/" + albumId + "/" + it.iid
                 it
             }
 

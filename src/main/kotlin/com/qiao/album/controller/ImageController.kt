@@ -50,14 +50,13 @@ class ImageController {
 
 
     @ApiIgnore
-    @GetMapping("/{albumId}/{imalId}")
+    @GetMapping("/get/{albumId}/{imalId}")
     fun getImage(
         @PathVariable albumId: Int,
         @PathVariable imalId: Int,
         response: HttpServletResponse,
-        loginUser: LoginUser
     ) {
-        albumService.getImage(albumId, imalId, loginUser.id, response)
+        albumService.getImage(albumId, imalId, response)
     }
 
     @ApiOperation("删除图片 可以批量删除")

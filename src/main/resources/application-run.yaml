@@ -34,7 +34,7 @@ server:
   ssl:
     enabled: false
   port: 8081
-  white: /user/token, /user/new, /, /v2/api-docs, /api/*, /webjars/*, /swagger*, /csrf
+  white: /user/token, /user/new, /, /v2/api-docs, /api/*, /webjars/*, /swagger*, /csrf, /image/get/*
   servlet:
     context-path: /a
     encoding:
