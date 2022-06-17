@@ -138,7 +138,7 @@ class AlbumServiceImpl : AlbumService {
         try {
             if (albumDao.hasRight(album) == 0) {
                 logd("上传图片：fail 没有上传权限")
-                return ComResult.er("no permission")
+                return ComResult.noper()
             }
             if (albumDao.hasRight(album) > 1) {
                 loge("没有上传权限 相册数量>1 {}", album)
@@ -211,7 +211,7 @@ class AlbumServiceImpl : AlbumService {
         return try {
             val album = albumDao.getAlbumById(albumId) ?: return ComResult.er("相册不存在")
             if (album.owner != id && album.private) {
-                return ComResult.er("no permission")
+                return ComResult.noper()
             }
             val total = imalDao.getImageCount(albumId)
             val offset = pageSize * (index - 1)
@@ -239,7 +239,7 @@ class AlbumServiceImpl : AlbumService {
     override fun deleteImage(album: Album, imalIds: ArrayList<Int>): ComResult<String> {
         try {
             if (albumDao.hasRight(album) == 0) {
-                return ComResult.er("no permission")
+                return ComResult.noper()
             }
             if (albumDao.hasRight(album) > 1) {
                 loge("相册数量>1 {}", album)

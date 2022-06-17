@@ -3,6 +3,8 @@ package com.qiao.album.pojo.dto;
 import cn.hutool.json.JSONUtil;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import javax.xml.crypto.Data;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ComResult<T> {
     private String code;
@@ -42,8 +44,26 @@ public class ComResult<T> {
         return ComResult.er(msg, null);
     }
 
+    public static <T> ComResult<T> fail(T data) {
+        return ComResult.er("fail", data);
+    }
+
     public static <T> ComResult<T> fail() {
-        return ComResult.er("fail");
+        return ComResult.fail(null);
+    }
+
+    /**
+     * no permission
+     */
+    public static <T> ComResult<T> noper(T data) {
+        return ComResult.er("no permission", data);
+    }
+
+    /**
+     * no permission
+     */
+    public static <T> ComResult<T> noper() {
+        return ComResult.noper(null);
     }
 
     public byte[] toByteArray() {

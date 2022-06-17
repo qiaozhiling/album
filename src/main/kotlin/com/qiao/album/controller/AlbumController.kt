@@ -26,12 +26,12 @@ class AlbumController {
     @ApiOperation("新建相册")
     @PostMapping("/new")
     fun newAlbum(
-        @ApiParam(value = "相册名字", required = true)
-        @RequestParam(name = "name") name: String,
-        @ApiParam(value = "相册描述", required = true)
-        @RequestParam(name = "describe", defaultValue = "") describe: String,
-        @ApiParam(value = "相册是否私有", required = false)
-        @RequestParam(name = "private", defaultValue = "true") private: Boolean,
+        @ApiParam(value = "相册名字", required = true) @RequestParam(name = "name") name: String,
+        @ApiParam(value = "相册描述", required = true) @RequestParam(name = "describe", defaultValue = "") describe: String,
+        @ApiParam(value = "相册是否私有", required = false) @RequestParam(
+            name = "private",
+            defaultValue = "true"
+        ) private: Boolean,
         @ApiIgnore loginUser: LoginUser
     ): ComResult<String?> {
         val album = Album(name, loginUser.id, describe, private)
@@ -58,7 +58,7 @@ class AlbumController {
     }
 
     @ApiOperation("删除用户相册")
-    @PostMapping("/delete" )
+    @PostMapping("/delete")
     fun deleteAlbum(
         @ApiParam(value = "相册id", required = true) @RequestParam(name = "albumId", required = true) albumId: Int,
         @ApiIgnore loginUser: LoginUser
@@ -72,7 +72,7 @@ class AlbumController {
     }
 
     @ApiOperation("更新用户相册信息")
-    @PostMapping("/update" )
+    @PostMapping("/update")
     fun updateAlbum(
         @RequestParam(name = "albumId", required = true) albumId: Int,
         @RequestParam(name = "private", required = false) private: Boolean?,
@@ -91,7 +91,7 @@ class AlbumController {
     }
 
     @ApiOperation("获取相册的图")
-    @PostMapping("/images" )
+    @PostMapping("/images")
     fun getImages(
         @RequestParam(name = "albumId", required = true) albumId: Int,
         @ApiParam(value = "一页的大小", required = true) @RequestParam(name = "pageSize", required = true) pageSize: Int,

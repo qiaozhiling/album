@@ -1,14 +1,11 @@
 package com.qiao.album.pojo.vo;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.annotations.ApiParam;
 
 public class ImageVo {
     private String name;
     private String url;
-    @ApiModelProperty("记录id")
+    @ApiModelProperty("记录id，差不多就是图片id")
     private Integer iid; // imal id
 
     public String getName() {

@@ -20,4 +20,40 @@
         FROM `image`
         WHERE `id` = #{id}
     </select>
+
+    <insert id="say">
+        INSERT INTO comment(user_id, imal_id, message, create_time, modified_time)
+        VALUES (#{userId}, #{imalId}, #{message}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+    </insert>
+
+    <select id="getCommentCount" resultType="int">
+        SELECT COUNT(*)
+        FROM comment
+        WHERE imal_id = #{imalId}
+          AND deleted = FALSE
+    </select>
+
+    <select id="getComments" resultType="sayVo">
+        SELECT *
+        FROM comment
+        WHERE imal_id = #{imalId}
+          AND deleted = FALSE
+        LIMIT #{offset},#{pageSize}
+    </select>
+
+    <select id="getCommentById" resultType="sayVo">
+        SELECT *
+        FROM comment
+        WHERE id = #{commentId}
+          AND deleted = FALSE
+    </select>
+
+    <update id="deleteCommentById">
+        UPDATE comment
+        SET deleted= TRUE,
+            modified_time=CURRENT_TIMESTAMP
+        WHERE id = #{commentId}
+          AND deleted = FALSE
+    </update>
+
 </mapper>
