@@ -2,6 +2,7 @@ package com.qiao.album.dao
 
 import com.qiao.album.pojo.vo.Album
 import org.apache.ibatis.annotations.Mapper
+import org.apache.ibatis.annotations.Param
 
 @Mapper
 interface AlbumDao {
@@ -41,4 +42,12 @@ interface AlbumDao {
     fun hasRight(album: Album): Int
 
     fun getAlbumById(albumId: Int): Album?
+
+    fun getCountByQuery(@Param("content") content: String): Int
+
+    fun getAlbumByQuery(
+        @Param("content") content: String,
+        @Param("pageSize") pageSize: Int,
+        @Param("offset") offset: Int
+    ): ArrayList<Album>
 }

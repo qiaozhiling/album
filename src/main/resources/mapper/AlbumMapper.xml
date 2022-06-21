@@ -81,4 +81,22 @@
           AND `deleted` = FALSE
     </select>
 
+
+    <select id="getCountByQuery" resultType="int">
+        SELECT COUNT(*)
+        FROM album
+        WHERE (`name` LIKE '%${content}%'
+            OR `describe` LIKE '%${content}%')
+          AND `deleted` = FALSE
+    </select>
+
+
+    <select id="getAlbumByQuery" resultType="album">
+        SELECT *
+        FROM `album`
+        WHERE (name LIKE '%${content}%'
+            OR `describe` LIKE '%${content}%')
+          AND `deleted` = FALSE
+        LIMIT #{offset},#{pageSize}
+    </select>
 </mapper>

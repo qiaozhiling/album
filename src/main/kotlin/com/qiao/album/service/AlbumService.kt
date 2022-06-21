@@ -14,8 +14,9 @@ interface AlbumService {
     fun deleteAlbum(album: Album): ComResult<String?>
     fun updateAlbum(album: Album): ComResult<String?>
     fun saveFiles(album: Album, images: Array<MultipartFile>): ComResult<Int>
-    fun getImage(albumId: Int, imalId: Int,response: HttpServletResponse)
+    fun getImage(albumId: Int, imalId: Int, response: HttpServletResponse)
     fun getImages(albumId: Int, pageSize: Int, index: Int, id: Int, host: String): ComResult<Pages<ImageVo>>
     fun deleteImage(album: Album, imalIds: ArrayList<Int>): ComResult<String>
+    fun queryAlbum(pageSize: Int, index: Int, content: String): ComResult<Pages<Album>>
 
 }

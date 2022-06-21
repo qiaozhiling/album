@@ -253,4 +253,26 @@ class AlbumServiceImpl : AlbumService {
         }
 
     }
+
+    override fun queryAlbum(pageSize: Int, index: Int, content: String): ComResult<Pages<Album>> {
+        logd("查询相册")
+        return try {
+            val total = albumDao.getCountByQuery(content)
+            val offset = pageSize * (index - 1)
+            val albumList = albumDao.getAlbumByQuery(content,pageSize,offset)
+            val pages = Pages<Album>().apply {
+                records = albumList
+                this.total = total
+                this.index = index
+                this.size = pageSize
+            }
+            logd("查询相册：成功")
+            ComResult.success(pages)
+        } catch (e: Exception) {
+            loge("查询相册：失败 {}", e)
+            ComResult.fail()
+        }
+    }
+
+
 }

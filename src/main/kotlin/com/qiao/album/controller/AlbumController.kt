@@ -102,4 +102,15 @@ class AlbumController {
         val host = request.requestURL.replace(request.requestURI.toRegex(), "")
         return albumService.getImages(albumId, pageSize, index, loginUser.id, host)
     }
+
+    @ApiOperation("模糊查询相册 相册名和描述")
+    @PostMapping("/queryAlbum")
+    fun queryAlbum(
+        @ApiParam(value = "一页的大小", required = true) @RequestParam(name = "pageSize", required = true) pageSize: Int,
+        @ApiParam(value = "第几页(1，2，3，...)", required = true) @RequestParam(name = "index", required = true) index: Int,
+        @ApiParam(value = "查询内容", required = true) @RequestParam(name = "content", required = true) content: String
+    ): ComResult<Pages<Album>> {
+        return albumService.queryAlbum(pageSize, index, content)
+    }
+
 }
